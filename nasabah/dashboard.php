@@ -107,7 +107,7 @@ try {
     <h2 style="margin:0 0 20px 0; color:#444; font-size:18px;">👋 Halo, <?= htmlspecialchars($_SESSION['user_login']) ?></h2>
     <span style="color: #777; font-size: 13px;">Selamat datang kembali di dashboard sistem informasi simpan pinjam</span>
     </div>
-    
+
     <?php if($next_bill): ?>
     <div class="bill-alert">
         <div>
@@ -217,4 +217,4 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../includes/footer.php'; 
