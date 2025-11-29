@@ -73,45 +73,78 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login Koperasi</title>
-    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/style.css?v=<?= time() ?>"> 
 </head>
 <body class="login-page">
 
-    <div class="login-container">
-        <div class="logo-area">
-           <img src="images/Login.jpg" alt="Logo R33"> 
+    <div class="login-split-wrapper">
+        
+        <!-- Left Side: Hero/Image -->
+        <div class="login-hero">
+            <div class="hero-content">
+                <h1>SISTEM INFORMASI MANAJEMEN</h1>
+                <p>Sistem Informasi Simpan Pinjam PT Rampai Berkah Bersama</p>
+                <span> Hak Cipta © 2025 by 
+                    <br>1. Adrian Yudhaswara
+                    <br>2. Andika Galih Pangestu
+<br> 3. Andika Daffa Fathi Rabbani 
+</span>
+            </div>
+            <div class="hero-overlay"></div>
         </div>
 
-        <form method="POST" action="">
-            <div class="form-row">
-                <label for="role">Role</label>
-                <select name="role" id="role" class="input-role-style" required>
-                    <option value="" disabled selected>-- Pilih Role --</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Nasabah">Nasabah</option>
-                </select>
-            </div>
+        <!-- Right Side: Form -->
+        <div class="login-form-container">
+            <div class="login-card-content">
+                <div class="login-header">
+                    <div class="logo-login">
+                        <img src="images/Login.jpg" alt="Logo">
+                    </div>
+                    <h2>Selamat Datang</h2>
+                    <p>Silakan login untuk melanjutkan</p>
+                </div>
 
-            <div class="form-row">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" autocomplete="off" required>
-            </div>
+                <form method="POST" action="" class="login-form">
+                    
+                    <div class="form-group">
+                        <label for="role">Masuk Sebagai</label>
+                        <div class="select-wrapper">
+                            <select name="role" id="role" required>
+                                <option value="" disabled selected>Pilih Role...</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Nasabah">Nasabah</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <div class="form-row">
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" required>
-            </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Masukkan username" autocomplete="off" required>
+                    </div>
 
-            <div class="btn-container">
-                <button type="submit" class="btn-login">Login</button>
-            </div>
-        </form>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Masukkan password" required>
+                    </div>
 
-        <?php if(!empty($pesan_error)): ?>
-            <div class="alert-msg">
-                <?php echo $pesan_error; ?>
+                    <button type="submit" class="btn-login-modern">
+                        Masuk Aplikasi <span class="arrow">→</span>
+                    </button>
+
+                </form>
+
+                <?php if(!empty($pesan_error)): ?>
+                    <div class="login-alert">
+                        <span class="icon">⚠️</span> <?php echo $pesan_error; ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="login-footer">
+                    <p>&copy; <?= date('Y') ?> PT Rampai Berkah Bersama</p>
+                </div>
             </div>
-        <?php endif; ?>
+        </div>
+
     </div>
 
 </body>

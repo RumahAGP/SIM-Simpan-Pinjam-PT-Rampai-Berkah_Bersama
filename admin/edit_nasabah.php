@@ -50,57 +50,67 @@ $list_jabatan = $pdo->query("SELECT * FROM jabatan")->fetchAll();
     <div class="msg-box <?php echo $tipe_pesan; ?>"><?php echo $pesan; ?></div>
 <?php endif; ?>
 
-<div class="window-panel">
-    <div class="window-header-strip"><div class="window-icon"></div></div>
-    <div class="form-wrapper" style="max-width: 600px; margin: 0 auto;">
-        
-        <form method="POST" action="">
-            <div class="admin-form-row">
-                <label>ID Nasabah</label>
-                <input type="text" value="<?php echo $data['id_nasabah']; ?>" disabled style="background:#eee;">
-            </div>
-
-            <div class="admin-form-row">
-                <label>Nama Lengkap</label>
-                <input type="text" name="nama_lengkap" value="<?php echo htmlspecialchars($data['nama_lengkap']); ?>" required>
-            </div>
-            
-            <div class="admin-form-row">
-                <label>Jabatan</label>
-                <select name="id_jabatan">
-                    <?php foreach($list_jabatan as $jab): ?>
-                        <option value="<?php echo $jab['id_jabatan']; ?>" 
-                            <?php echo ($data['id_jabatan'] == $jab['id_jabatan']) ? 'selected' : ''; ?>>
-                            <?php echo $jab['nama_jabatan']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <div class="admin-form-row">
-                <label>Username</label>
-                <input type="text" name="username" value="<?php echo htmlspecialchars($data['username']); ?>" required>
-            </div>
-
-            <div class="admin-form-row">
-                <label>Status</label>
-                <select name="status">
-                    <option value="AKTIF" <?php echo ($data['status'] == 'AKTIF') ? 'selected' : ''; ?>>AKTIF</option>
-                    <option value="SUSPEND" <?php echo ($data['status'] == 'SUSPEND') ? 'selected' : ''; ?>>SUSPEND</option>
-                </select>
-            </div>
-
-            <div class="admin-form-row">
-                <label>Password Baru</label>
-                <input type="password" name="password" placeholder="(Isi hanya jika ingin ganti password)">
-            </div>
-            
-            <div class="admin-btn-container">
-                <button type="submit" class="btn-admin-action">Simpan Perubahan</button>
-                <a href="data_nasabah.php" class="btn-admin-action" style="background:#d9534f; text-decoration:none; text-align:center; line-height: normal;">Kembali</a>
-            </div>
-        </form>
+<div class="dashboard-content">
+    
+    <div class="dashboard-welcome">
+        <h2>✏️ Edit Data Nasabah</h2>
+        <span>Perbarui informasi nasabah di bawah ini</span>
     </div>
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <span>Formulir Edit Nasabah</span>
+        </div>
+        <div class="widget-body">
+            <form method="POST" action="">
+                <div class="admin-form-row">
+                    <label>ID Nasabah</label>
+                    <input type="text" value="<?php echo $data['id_nasabah']; ?>" disabled style="background:#f1f5f9; color:#64748b; border-color:#e2e8f0;">
+                </div>
+
+                <div class="admin-form-row">
+                    <label>Nama Lengkap</label>
+                    <input type="text" name="nama_lengkap" value="<?php echo htmlspecialchars($data['nama_lengkap']); ?>" required>
+                </div>
+                
+                <div class="admin-form-row">
+                    <label>Jabatan</label>
+                    <select name="id_jabatan">
+                        <?php foreach($list_jabatan as $jab): ?>
+                            <option value="<?php echo $jab['id_jabatan']; ?>" 
+                                <?php echo ($data['id_jabatan'] == $jab['id_jabatan']) ? 'selected' : ''; ?>>
+                                <?php echo $jab['nama_jabatan']; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="admin-form-row">
+                    <label>Username</label>
+                    <input type="text" name="username" value="<?php echo htmlspecialchars($data['username']); ?>" required>
+                </div>
+
+                <div class="admin-form-row">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="AKTIF" <?php echo ($data['status'] == 'AKTIF') ? 'selected' : ''; ?>>AKTIF</option>
+                        <option value="SUSPEND" <?php echo ($data['status'] == 'SUSPEND') ? 'selected' : ''; ?>>SUSPEND</option>
+                    </select>
+                </div>
+
+                <div class="admin-form-row">
+                    <label>Password Baru</label>
+                    <input type="password" name="password" placeholder="(Isi hanya jika ingin ganti password)">
+                </div>
+                
+                <div class="admin-btn-container">
+                    <button type="submit" class="btn-admin-action">Simpan Perubahan</button>
+                    <a href="data_nasabah.php" class="btn-admin-action" style="background:#fff; color:#64748b; border:1px solid #cbd5e1; box-shadow:none;">Kembali</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>

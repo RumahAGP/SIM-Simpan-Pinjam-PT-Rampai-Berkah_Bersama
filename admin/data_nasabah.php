@@ -46,52 +46,66 @@ $list_jabatan = $pdo->query("SELECT * FROM jabatan")->fetchAll();
     </div>
 <?php endif; ?>
 
-<div class="window-panel">
-    <div class="window-header-strip"><div class="window-icon"></div></div>
+<div class="dashboard-content">
     
-    <div style="padding: 15px; text-align:right;">
-        <button onclick="window.print()" class="btn-admin-action" style="background:#17a2b8;">🖨️ Cetak Laporan</button>
+    <div class="dashboard-welcome">
+        <h2>👥 Data Nasabah</h2>
+        <span>Kelola data nasabah, edit informasi, atau reset password</span>
     </div>
 
-    <div class="table-wrapper">
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Jabatan</th>
-                    <th>Nama Lengkap</th>
-                    <th>Username</th>
-                    <th>Status</th>
-                    <th style="width: 100px;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data_nasabah as $row): ?>
-                <tr>
-                    <td><?= $row['id_nasabah']; ?></td>
-                    <td><?= htmlspecialchars($row['nama_jabatan']); ?></td>
-                    <td><?= htmlspecialchars($row['nama_lengkap']); ?></td>
-                    <td><?= htmlspecialchars($row['username']); ?></td>
-                    <td>
-                        <span style="padding:3px 8px; border-radius:4px; font-size:11px; color:white; background-color: <?= $row['status']=='AKTIF'?'#28a745':'#dc3545' ?>">
-                            <?= $row['status']; ?>
-                        </span>
-                    </td>
-                    <td style="text-align:center;">
-                        <button type="button" class="btn-edit"
-                            data-id="<?= $row['id_nasabah']; ?>"
-                            data-nama="<?= htmlspecialchars($row['nama_lengkap']); ?>"
-                            data-user="<?= htmlspecialchars($row['username']); ?>"
-                            data-jabatan="<?= $row['id_jabatan']; ?>"
-                            data-status="<?= $row['status']; ?>"
-                            onclick="openEditNasabah(this)">
-                            Edit
-                        </button>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    <div class="widget-box">
+        <div class="widget-header">
+            <span>Daftar Nasabah Terdaftar</span>
+            <button onclick="window.print()" class="btn-admin-action" style="background:#17a2b8; padding: 8px 15px; font-size: 12px;">🖨️ Cetak</button>
+        </div>
+        
+        <div class="widget-body">
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Jabatan</th>
+                            <th>Nama Lengkap</th>
+                            <th>Username</th>
+                            <th>Status</th>
+                            <th style="width: 100px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($data_nasabah as $row): ?>
+                        <tr>
+                            <td><?= $row['id_nasabah']; ?></td>
+                            <td><?= htmlspecialchars($row['nama_jabatan']); ?></td>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar-small"><?= strtoupper(substr($row['nama_lengkap'],0,2)) ?></div>
+                                    <div class="font-bold"><?= htmlspecialchars($row['nama_lengkap']); ?></div>
+                                </div>
+                            </td>
+                            <td><?= htmlspecialchars($row['username']); ?></td>
+                            <td>
+                                <span class="status-badge <?= $row['status']=='AKTIF'?'badge-success':'badge-danger' ?>">
+                                    <?= $row['status']; ?>
+                                </span>
+                            </td>
+                            <td style="text-align:center;">
+                                <button type="button" class="btn-edit"
+                                    data-id="<?= $row['id_nasabah']; ?>"
+                                    data-nama="<?= htmlspecialchars($row['nama_lengkap']); ?>"
+                                    data-user="<?= htmlspecialchars($row['username']); ?>"
+                                    data-jabatan="<?= $row['id_jabatan']; ?>"
+                                    data-status="<?= $row['status']; ?>"
+                                    onclick="openEditNasabah(this)">
+                                    ✏️
+                                </button>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -150,4 +164,4 @@ $list_jabatan = $pdo->query("SELECT * FROM jabatan")->fetchAll();
     </div> 
 </div>
 
-<?php require_once '../includes/footer.php';
+<?php require_once '../includes/footer.php'; ?>

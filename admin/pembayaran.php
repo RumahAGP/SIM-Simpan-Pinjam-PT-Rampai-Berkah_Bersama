@@ -83,105 +83,118 @@ if ($sisa_baris < 0) $sisa_baris = 0;
     <div class="msg-box <?php echo $tipe_pesan; ?>"><?php echo $pesan; ?></div>
 <?php endif; ?>
 
-<div class="window-panel">
-    <div class="window-header-strip"><div class="window-icon"></div></div>
+<div class="dashboard-content">
     
-    <div class="split-layout" style="padding: 20px;">
-        <div class="left-panel">
-            
-            <form method="GET" action="pembayaran.php" id="searchForm">
-                <div class="admin-form-row">
-                    <label>ID Pinjaman</label>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" name="id_pinjaman" id="inputIdPinjaman" 
-                               value="<?php echo htmlspecialchars($id_cari); ?>" 
-                               class="input-readonly" readonly 
-                               onclick="openLookupPinjaman()"
-                               placeholder="Klik cari pinjaman..." style="cursor:pointer; background:#fff;">
+    <div class="dashboard-welcome">
+        <h2>💳 Pembayaran Angsuran</h2>
+        <span>Proses pembayaran angsuran pinjaman nasabah</span>
+    </div>
+
+    <div class="row-2-col">
+        <!-- Left Column: Form -->
+        <div class="widget-box">
+            <div class="widget-header">
+                <span>Formulir Pembayaran</span>
+            </div>
+            <div class="widget-body">
+                <form method="GET" action="pembayaran.php" id="searchForm" style="margin-bottom: 20px;">
+                    <div class="admin-form-row">
+                        <label>ID Pinjaman</label>
+                        <div style="display:flex; gap:10px; width:100%;">
+                            <input type="text" name="id_pinjaman" id="inputIdPinjaman" 
+                                   value="<?php echo htmlspecialchars($id_cari); ?>" 
+                                   class="input-readonly" readonly 
+                                   onclick="openLookupPinjaman()"
+                                   placeholder="Klik cari pinjaman..." style="cursor:pointer; background:#fff; border: 1px solid #e2e8f0; flex-grow: 1;">
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
-            <form method="POST" action="">
-                <input type="hidden" name="id_pinjaman_hide" value="<?php echo $id_cari; ?>">
-                <input type="hidden" name="nominal_bayar" value="<?php echo round($tagihan_per_bulan); ?>">
-                
-                <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ccc;">
+                <form method="POST" action="">
+                    <input type="hidden" name="id_pinjaman_hide" value="<?php echo $id_cari; ?>">
+                    <input type="hidden" name="nominal_bayar" value="<?php echo round($tagihan_per_bulan); ?>">
+                    
+                    <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f1f5f9;">
 
-                <div class="admin-form-row">
-                    <label>Nasabah</label>
-                    <input type="text" class="input-readonly" 
-                           value="<?php echo ($data_pinjaman) ? htmlspecialchars($data_pinjaman['nama_lengkap']) : ''; ?>" readonly>
-                </div>
-                
-                <div class="admin-form-row">
-                    <label>Nominal Pinjaman</label>
-                    <input type="text" class="input-readonly"
-                           value="<?php echo ($data_pinjaman) ? formatRupiah($data_pinjaman['nominal_pinjaman']) : ''; ?>" readonly>
-                </div>
+                    <div class="admin-form-row">
+                        <label>Nasabah</label>
+                        <input type="text" class="input-readonly" 
+                               value="<?php echo ($data_pinjaman) ? htmlspecialchars($data_pinjaman['nama_lengkap']) : ''; ?>" readonly style="background-color: #f8fafc;">
+                    </div>
+                    
+                    <div class="admin-form-row">
+                        <label>Nominal Pinjaman</label>
+                        <input type="text" class="input-readonly"
+                               value="<?php echo ($data_pinjaman) ? formatRupiah($data_pinjaman['nominal_pinjaman']) : ''; ?>" readonly style="background-color: #f8fafc;">
+                    </div>
 
-                <div class="admin-form-row">
-                    <label>Tagihan / Bulan</label>
-                    <input type="text" class="input-readonly" style="font-weight:bold;"
-                           value="<?php echo ($data_pinjaman) ? formatRupiah($tagihan_per_bulan) : ''; ?>" readonly>
-                </div>
+                    <div class="admin-form-row">
+                        <label>Tagihan / Bulan</label>
+                        <input type="text" class="input-readonly" style="font-weight:bold; color: #0f172a;"
+                               value="<?php echo ($data_pinjaman) ? formatRupiah($tagihan_per_bulan) : ''; ?>" readonly>
+                    </div>
 
-                <div class="admin-form-row">
-                    <label>Angsuran Ke-</label>
-                    <input type="text" name="angsuran_ke" class="input-readonly" 
-                           value="<?php echo ($data_pinjaman) ? $angsuran_ke_next : ''; ?>" readonly>
-                </div>
-                
-                <div class="admin-form-row">
-                    <label>Tanggal Pembayaran</label>
-                    <input type="date" name="tanggal" 
-                           value="<?php echo date('Y-m-d'); ?>" 
-                           <?php echo (!$data_pinjaman) ? 'disabled' : ''; ?>>
-                </div>
-                
-                <div class="admin-btn-container" style="padding-left:0; gap:10px;">
-                    <button type="submit" class="btn-admin-action" style="background:#28a745; width:100px;"
-                        <?php echo (!$data_pinjaman) ? 'disabled' : ''; ?>>
-                        Bayar
-                    </button>
-                    <button type="button" class="btn-admin-action" style="background:#17a2b8; width:100px;" 
-                        onclick="window.print();" 
-                        <?php echo (!$data_pinjaman) ? 'disabled' : ''; ?>>
-                        Cetak
-                    </button>
-                </div>
-            </form>
+                    <div class="admin-form-row">
+                        <label>Angsuran Ke-</label>
+                        <input type="text" name="angsuran_ke" class="input-readonly" 
+                               value="<?php echo ($data_pinjaman) ? $angsuran_ke_next : ''; ?>" readonly style="background-color: #f8fafc;">
+                    </div>
+                    
+                    <div class="admin-form-row">
+                        <label>Tanggal Pembayaran</label>
+                        <input type="date" name="tanggal" 
+                               value="<?php echo date('Y-m-d'); ?>" 
+                               <?php echo (!$data_pinjaman) ? 'disabled' : ''; ?>>
+                    </div>
+                    
+                    <div class="admin-btn-container" style="padding-left:0; gap:10px; margin-top: 20px;">
+                        <button type="submit" class="btn-admin-action" style="background:var(--success-color); flex: 1;"
+                            <?php echo (!$data_pinjaman) ? 'disabled' : ''; ?>>
+                            Bayar
+                        </button>
+                        <button type="button" class="btn-admin-action" style="background:var(--info-color); flex: 1;" 
+                            onclick="window.print();" 
+                            <?php echo (!$data_pinjaman) ? 'disabled' : ''; ?>>
+                            Cetak
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <div class="right-panel">
-             <div class="table-wrapper" style="padding: 10px;">
-                <h4 style="margin-top:0; margin-bottom:10px; border-bottom:1px solid #ddd; padding-bottom:5px;">Riwayat Angsuran (Pinjaman ID: <?php echo $id_cari; ?>)</h4>
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th><th>Ke</th><th>Nominal</th><th>Tanggal Bayar</th><th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if(!empty($riwayat_angsuran)): ?>
-                            <?php foreach($riwayat_angsuran as $row): ?>
+        <!-- Right Column: History -->
+        <div class="widget-box">
+            <div class="widget-header">
+                <span>Riwayat Angsuran (ID: <?php echo $id_cari ? $id_cari : '-'; ?>)</span>
+            </div>
+            <div class="widget-body">
+                 <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
                             <tr>
-                                <td style="text-align:center;"><?php echo $row['id_angsuran']; ?></td>
-                                <td style="text-align:center;"><?php echo $row['angsuran_ke']; ?></td>
-                                <td style="text-align:right;"><?php echo formatRupiah($row['nominal_angsuran']); ?></td>
-                                <td style="text-align:center;"><?php echo date('d-m-Y', strtotime($row['tgl_pembayaran'])); ?></td>
-                                <td style="color:green; text-align:center; font-weight:bold;">LUNAS</td>
+                                <th>Ke</th><th>Nominal</th><th>Tanggal</th><th>Status</th>
                             </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                        <?php for($i=0; $i < $sisa_baris; $i++): ?>
-                        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td></tr>
-                        <?php endfor; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php if(!empty($riwayat_angsuran)): ?>
+                                <?php foreach($riwayat_angsuran as $row): ?>
+                                <tr>
+                                    <td style="text-align:center;"><?php echo $row['angsuran_ke']; ?></td>
+                                    <td style="text-align:right;"><?php echo formatRupiah($row['nominal_angsuran']); ?></td>
+                                    <td style="text-align:center;"><?php echo date('d-m-Y', strtotime($row['tgl_pembayaran'])); ?></td>
+                                    <td style="text-align:center;"><span class="status-badge badge-success">LUNAS</span></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr><td colspan="4" style="text-align:center; padding: 20px; color: #94a3b8;">Belum ada riwayat angsuran</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <div id="lookupModal" class="modal-overlay">
@@ -232,4 +245,4 @@ if ($sisa_baris < 0) $sisa_baris = 0;
     </div>
 </div>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>

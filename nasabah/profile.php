@@ -17,42 +17,73 @@ $profile = $stmt->fetch();
 if (empty($profile)) {
     die("Data profil tidak ditemukan.");
 }
+
+// Initials for Avatar
+$initials = strtoupper(substr($profile['nama_lengkap'], 0, 1));
 ?>
 
-<div class="window-panel">
-    <div class="window-header-strip"><div class="window-icon"></div></div>
-    
-    <div class="form-wrapper" style="width:100%; max-width:600px; margin: 0 auto; padding-top: 40px;">
-        <h3 style="margin-bottom:20px; font-size:20px; color:#333; text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 10px;">DATA DIRI NASABAH</h3>
+<div class="dashboard-content">
+    <div class="dashboard-welcome">
+        <h2>👤 Kelola informasi data diri anda</h2>
+    </div>
 
-        <div style="font-size:16px; line-height:2;">
+    <div class="profile-layout">
+        
+        <!-- Left Sidebar: Avatar & Short Info -->
+        <div class="profile-sidebar">
+            <div class="profile-avatar-large">
+                <?php echo $initials; ?>
+            </div>
+            <div class="profile-name"><?php echo htmlspecialchars($profile['nama_lengkap']); ?></div>
+            <div class="profile-role"><?php echo htmlspecialchars($profile['nama_jabatan'] ?? 'Nasabah'); ?></div>
             
-            <div style="padding:8px 0; border-bottom:1px solid #eee;">
-                <strong>ID Nasabah:</strong> <?php echo $profile['id_nasabah']; ?>
-            </div>
-
-            <div style="padding:8px 0; border-bottom:1px solid #eee;">
-                <strong>Nama Lengkap:</strong> <?php echo htmlspecialchars($profile['nama_lengkap']); ?>
-            </div>
-
-            <div style="padding:8px 0; border-bottom:1px solid #eee;">
-                <strong>Username:</strong> <?php echo htmlspecialchars($profile['username']); ?>
-            </div>
-
-            <div style="padding:8px 0; border-bottom:1px solid #eee;">
-                <strong>Jabatan:</strong> <?php echo htmlspecialchars($profile['nama_jabatan'] ?? '-'); ?>
-            </div>
-
-            <div style="padding:8px 0;">
-                <strong>Status Akun:</strong>
-                <span style="padding:4px 12px; border-radius:15px; font-weight:bold; color:#fff; font-size: 14px;
-                    background:<?php echo ($profile['status']=='AKTIF')?'#28a745':'#dc3545'; ?>;">
+            <div style="margin-top: 10px;">
+                <span class="status-badge <?php echo ($profile['status']=='AKTIF')?'badge-success':'badge-danger'; ?>">
                     <?php echo $profile['status']; ?>
                 </span>
             </div>
-
         </div>
+
+        <!-- Right Main: Detailed Info -->
+        <div class="profile-main">
+            <div class="profile-section-title">
+                <span>📄 Detail Informasi</span>
+            </div>
+
+            <div class="profile-grid">
+                <div class="profile-item">
+                    <label>ID Nasabah</label>
+                    <div><?php echo $profile['id_nasabah']; ?></div>
+                </div>
+
+                <div class="profile-item">
+                    <label>Username</label>
+                    <div><?php echo htmlspecialchars($profile['username']); ?></div>
+                </div>
+
+                <div class="profile-item">
+                    <label>Nama Lengkap</label>
+                    <div><?php echo htmlspecialchars($profile['nama_lengkap']); ?></div>
+                </div>
+
+                <div class="profile-item">
+                    <label>Jabatan</label>
+                    <div><?php echo htmlspecialchars($profile['nama_jabatan'] ?? '-'); ?></div>
+                </div>
+
+                <div class="profile-item">
+                    <label>Tanggal Bergabung</label>
+                    <div>-</div> <!-- Bisa ditambahkan kolom tgl_daftar jika ada -->
+                </div>
+
+                <div class="profile-item">
+                    <label>Status Akun</label>
+                    <div style="color: var(--success-color);"><?php echo $profile['status']; ?></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>

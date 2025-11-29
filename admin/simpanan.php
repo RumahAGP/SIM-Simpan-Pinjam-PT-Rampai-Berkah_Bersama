@@ -40,37 +40,46 @@ $list_nasabah = $pdo->query("SELECT id_nasabah, nama_lengkap, username FROM nasa
     <div class="msg-box <?php echo $tipe_pesan; ?>"><?php echo $pesan; ?></div>
 <?php endif; ?>
 
-<div class="window-panel">
-    <div class="window-header-strip"><div class="window-icon"></div></div>
-    <div class="form-wrapper">
-
-        <form method="POST" action="">
-            <div class="admin-form-row">
-                <label>Pilih Nasabah</label>
-                <input type="text" id="inputNasabah" class="input-readonly" placeholder="Klik untuk cari nasabah..."
-                       readonly onclick="openLookupNasabah()" style="cursor: pointer; background-color: #fff;">
-                <input type="hidden" name="id_nasabah" id="idNasabahHidden" required>
-            </div>
-
-            <div class="admin-form-row">
-                <label>Nominal (Rp)</label>
-                <input type="number" name="nominal" placeholder="Contoh: 50000" 
-                       value="<?php echo htmlspecialchars($nominal); ?>" required>
-            </div>
-
-            <div class="admin-form-row">
-                <label>Tgl Uang Masuk</label>
-                <input type="date" name="tanggal" style="width: 160px; flex:none;" 
-                       value="<?php echo date('Y-m-d'); ?>" required>
-            </div>
-
-            <div class="admin-btn-container">
-                <button type="submit" class="btn-admin-action">Simpan</button>
-                <a href="simpanan.php" class="btn-admin-action" style="background:#d9534f; text-decoration:none; text-align:center; line-height:normal;">Batal</a>
-            </div>
-        </form>
-
+<div class="dashboard-content">
+    
+    <div class="dashboard-welcome">
+        <h2>💰 Input Simpanan</h2>
+        <span>Masukkan data simpanan nasabah di sini</span>
     </div>
+
+    <div class="widget-box">
+        <div class="widget-header">
+            <span>Formulir Setor Simpanan</span>
+        </div>
+        <div class="widget-body">
+            <form method="POST" action="">
+                <div class="admin-form-row">
+                    <label>Pilih Nasabah</label>
+                    <input type="text" id="inputNasabah" class="input-readonly" placeholder="Klik untuk cari nasabah..."
+                           readonly onclick="openLookupNasabah()" style="cursor: pointer; background-color: #fff; border: 1px solid #e2e8f0;">
+                    <input type="hidden" name="id_nasabah" id="idNasabahHidden" required>
+                </div>
+
+                <div class="admin-form-row">
+                    <label>Nominal (Rp)</label>
+                    <input type="number" name="nominal" placeholder="Contoh: 50000" 
+                           value="<?php echo htmlspecialchars($nominal); ?>" required>
+                </div>
+
+                <div class="admin-form-row">
+                    <label>Tgl Uang Masuk</label>
+                    <input type="date" name="tanggal" style="width: 100%; max-width: 200px;" 
+                           value="<?php echo date('Y-m-d'); ?>" required>
+                </div>
+
+                <div class="admin-btn-container">
+                    <button type="submit" class="btn-admin-action">Simpan</button>
+                    <a href="simpanan.php" class="btn-admin-action" style="background:#fff; color:#64748b; border:1px solid #cbd5e1; box-shadow:none;">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <div id="lookupModal" class="modal-overlay">
@@ -118,4 +127,4 @@ $list_nasabah = $pdo->query("SELECT id_nasabah, nama_lengkap, username FROM nasa
     </div>
 </div>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>

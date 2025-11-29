@@ -102,10 +102,11 @@ try {
 }
 ?>
 
-<div class="window-panel"><div style="padding:20px;">
+<div class="dashboard-content">
     
-    <h2 style="margin:0 0 20px 0; color:#444; font-size:18px;">👋 Halo, <?= htmlspecialchars($_SESSION['user_login']) ?></h2>
-    <span style="color: #777; font-size: 13px;">Selamat datang kembali di dashboard sistem informasi simpan pinjam</span>
+    <div class="dashboard-welcome">
+        <h2>👋 Halo, <?= htmlspecialchars($_SESSION['user_login']) ?></h2>
+        <span>Selamat datang kembali di dashboard sistem informasi simpan pinjam</span>
     </div>
 
     <?php if($next_bill): ?>
@@ -117,13 +118,6 @@ try {
         <a href="nasabah_pembayaran.php" class="btn-admin-action" style="text-decoration:none; background:#ffc107; color:#333;">Bayar</a>
     </div>
     <?php endif; ?>
-
-    <div class="nasabah-actions">
-        <a href="nasabah_pinjaman.php" class="btn-quick"><span>💸</span> Ajukan</a>
-        <a href="nasabah_simpanan.php" class="btn-quick"><span>💰</span> Simpanan</a>
-        <a href="nasabah_pembayaran.php" class="btn-quick"><span>📋</span> Bayar</a>
-        <a href="profile.php" class="btn-quick"><span>👤</span> Profil</a>
-    </div>
 
     <div class="dashboard-grid">
         <div class="info-card card-simpanan">
@@ -166,40 +160,43 @@ try {
         </div>
     </div>
 
-    <div class="chart-section">
-        <div class="chart-wrapper">
-            <div class="chart-header">
-                <h2>Grafik Keuangan Saya (6 Bulan)</h2>
+    <div class="row-2-col">
+        <div class="widget-box">
+            <div class="widget-header">
+                <span>📈 Grafik Keuangan Saya (6 Bulan)</span>
             </div>
-            <div class="chart-container-fixed">
-                <canvas id="chart-keuangan"></canvas>
+            <div class="widget-body">
+                <div class="chart-container-fixed">
+                    <canvas id="chart-keuangan"></canvas>
+                </div>
             </div>
         </div>
         
-        <div class="activity-log">
-            <h2>Aktivitas Terakhir</h2>
-            <table class="table-widget">
-                <tbody>
-                <?php if (!empty($logs)): ?>
-                    <?php foreach($logs as $l): 
-                        $bg = $l['j']=='Simpanan'?'#e8f5e9':($l['j']=='Pinjaman'?'#ffebee':'#e3f2fd');
-                        $cl = $l['j']=='Simpanan'?'green':($l['j']=='Pinjaman'?'red':'blue');
-                    ?>
-                    <tr>
-                        <td><span style="background:<?=$bg?>; color:<?=$cl?>; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:bold;"><?= $l['j'] ?></span></td>
-                        <td style="font-weight:bold; font-size:12px;"><?= formatRupiah($l['n']) ?></td>
-                        <td style="color:#999; font-size:11px; text-align:right;"><?= date('d M H:i', strtotime($l['t'])) ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr><td colspan="3" style="text-align:center; color:#999; padding:20px;">Belum ada aktivitas.</td></tr>
-                <?php endif; ?>
-                </tbody>
-            </table>
+        <div class="widget-box">
+            <div class="widget-header"><span>🔔 Aktivitas Terakhir</span></div>
+            <div class="widget-body activity-widget-body">
+                <table class="table-widget">
+                    <tbody>
+                    <?php if (!empty($logs)): ?>
+                        <?php foreach($logs as $l): 
+                            $badgeClass = $l['j']=='Simpanan'?'badge-success':($l['j']=='Pinjaman'?'badge-danger':'badge-info');
+                        ?>
+                        <tr>
+                            <td><span class="status-badge <?= $badgeClass ?>"><?= $l['j'] ?></span></td>
+                            <td class="font-bold"><?= formatRupiah($l['n']) ?></td>
+                            <td class="text-muted"><?= date('d M H:i', strtotime($l['t'])) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="3" class="text-center text-muted">Belum ada aktivitas.</td></tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-</div></div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -217,4 +214,4 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>

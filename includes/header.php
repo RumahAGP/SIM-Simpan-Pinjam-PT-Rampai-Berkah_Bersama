@@ -28,8 +28,9 @@ $page_title = getPageTitle($current_page);
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koperasi - <?= ucwords(strtolower($page_title)) ?></title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css?v=<?= time() ?>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
 </head>
 <body class="admin-mode">
@@ -56,13 +57,26 @@ $page_title = getPageTitle($current_page);
                     <a href="nasabah_pembayaran.php" class="btn-menu <?= $current_page == 'nasabah_pembayaran.php' ? 'active' : '' ?>">Pembayaran Saya</a>
                 
                 <?php endif; ?>
-                <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> <br></br> 
+                
                 <a href="../index.php?logout=true" class="btn-menu btn-logout">Logout</a>
             </nav>
         </aside>
 
         <main class="main-content">
             <header class="top-header">
-                <h1><?= $page_title ?></h1>
+                <div class="header-left">
+                    <h1><?= $page_title ?></h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <span class="user-name"><?= $_SESSION['user_login'] ?? 'Guest' ?></span>
+                            <span class="user-role"><?= $_SESSION['role'] ?? '' ?></span>
+                        </div>
+                        <div class="user-avatar-circle">
+                            <?= strtoupper(substr($_SESSION['user_login'] ?? 'U', 0, 1)) ?>
+                        </div>
+                    </div>
+                </div>
             </header>
             <div class="content-body">

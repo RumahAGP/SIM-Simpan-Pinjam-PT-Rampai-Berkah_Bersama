@@ -33,79 +33,70 @@ foreach ($raw_angsuran as $bayar) {
 }
 // Kirim ke JS
 $json_angsuran = json_encode($data_angsuran);
-
-$min_baris = 12;
-$sisa_baris = $min_baris - count($list_pinjaman);
-if ($sisa_baris < 0) $sisa_baris = 0;
 ?>
 
-<div class="window-panel">
-    <div class="window-header-strip"><div class="window-icon"></div></div>
-
-    <div class="form-wrapper" style="padding-top:20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h4 style="margin:0; border-left:4px solid #007bff; padding-left:10px;">Riwayat Pembayaran Pinjaman</h4>
-            <button class="btn-admin-action" style="background:#17a2b8;" onclick="window.print()">🖨️ Cetak</button>
+<div class="dashboard-content">
+    <div class="widget-box">
+        <div class="widget-header">
+            <span>Riwayat Pembayaran Pinjaman</span>
+            <button class="btn-admin-action" style="background:var(--info-color);" onclick="window.print()">🖨️ Cetak</button>
         </div>
+        <div class="widget-body">
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">ID</th>
+                            <th>Nominal Pinjaman</th>
+                            <th>Alasan</th>
+                            <th>Tenor</th>
+                            <th>Tanggal Pengajuan</th>
+                            <th style="width:100px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($list_pinjaman as $row): ?>
+                        <tr>
+                            <td style="text-align:center;"><?php echo $row['id_pinjaman']; ?></td>
+                            <td>Rp <?php echo formatRupiah($row['nominal_pinjaman']); ?></td>
+                            <td><?php echo htmlspecialchars($row['alasan_pengajuan']); ?></td>
+                            <td style="text-align:center;"><?php echo $row['tenor']; ?> Bulan</td>
+                            <td style="text-align:center;"><?php echo date('d-m-Y', strtotime($row['tgl_pengajuan'])); ?></td>
+                            
+                            <td style="text-align:center;">
+                                <?php 
+                                    // Hitung jumlah angsuran yang sudah masuk
+                                    $jumlah_bayar = count($data_angsuran[$row['id_pinjaman']] ?? []);
+                                    
+                                    // Cek Lunas: Jika status di DB 'LUNAS' ATAU jumlah bayar >= tenor
+                                    $is_lunas = ($row['status'] === 'LUNAS') || ($jumlah_bayar >= $row['tenor']);
+                                ?>
 
-        <div class="simpanan-table-container">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th style="width:40px;">ID</th>
-                        <th>Nominal Pinjaman</th>
-                        <th>Alasan</th>
-                        <th>Tenor</th>
-                        <th>Tanggal Pengajuan</th>
-                        <th style="width:100px;">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($list_pinjaman as $row): ?>
-                    <tr>
-                        <td style="text-align:center;"><?php echo $row['id_pinjaman']; ?></td>
-                        <td>Rp <?php echo formatRupiah($row['nominal_pinjaman']); ?></td>
-                        <td><?php echo htmlspecialchars($row['alasan_pengajuan']); ?></td>
-                        <td style="text-align:center;"><?php echo $row['tenor']; ?> Bulan</td>
-                        <td style="text-align:center;"><?php echo date('d-m-Y', strtotime($row['tgl_pengajuan'])); ?></td>
-                        
-                        <td style="text-align:center;">
-                            <?php 
-                                // Hitung jumlah angsuran yang sudah masuk
-                                $jumlah_bayar = count($data_angsuran[$row['id_pinjaman']] ?? []);
-                                
-                                // Cek Lunas: Jika status di DB 'LUNAS' ATAU jumlah bayar >= tenor
-                                $is_lunas = ($row['status'] === 'LUNAS') || ($jumlah_bayar >= $row['tenor']);
-                            ?>
+                                <?php if ($is_lunas): ?>
+                                    <span class="status-badge badge-active">
+                                        ✔ LUNAS
+                                    </span>
+                                <?php else: ?>
+                                    <button class="btn-admin-action" style="background:var(--primary-color); padding: 4px 10px; width: auto; font-size: 11px;" 
+                                        onclick="showDetail(
+                                            '<?php echo $row['id_pinjaman']; ?>',
+                                            '<?php echo $row['tenor']; ?>',
+                                            '<?php echo $row['nominal_pinjaman']; ?>'
+                                        )">
+                                        Lihat
+                                    </button>
+                                <?php endif; ?>
+                            </td>
 
-                            <?php if ($is_lunas): ?>
-                                <span style="color: green; font-weight: bold; border: 1px solid green; padding: 4px 8px; border-radius: 4px; background-color: #e8f5e9; font-size: 11px;">
-                                    ✔ LUNAS
-                                </span>
-                            <?php else: ?>
-                                <button class="btn-admin-action" style="background:#007bff; padding: 4px 10px; width: auto; font-size: 11px;" 
-                                    onclick="showDetail(
-                                        '<?php echo $row['id_pinjaman']; ?>',
-                                        '<?php echo $row['tenor']; ?>',
-                                        '<?php echo $row['nominal_pinjaman']; ?>'
-                                    )">
-                                    Lihat
-                                </button>
-                            <?php endif; ?>
-                        </td>
+                        </tr>
+                        <?php endforeach; ?>
 
-                    </tr>
-                    <?php endforeach; ?>
-
-                    <?php if(empty($list_pinjaman)): ?>
-                        <tr><td colspan="6" style="text-align:center; padding:20px;">Tidak ada data pinjaman.</td></tr>
-                    <?php endif; ?>
-
-                    <?php for($i=0; $i<$sisa_baris; $i++): ?>
-                        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
+                        <?php if(empty($list_pinjaman)): ?>
+                            <tr><td colspan="6" style="text-align:center; padding:20px;">Tidak ada data pinjaman.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -182,4 +173,4 @@ if ($sisa_baris < 0) $sisa_baris = 0;
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 </script>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>

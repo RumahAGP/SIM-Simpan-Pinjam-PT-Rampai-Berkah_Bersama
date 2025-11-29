@@ -56,21 +56,44 @@ try {
 }
 ?>
 
-<div class="window-panel"><div style="padding:20px;">
+<div class="dashboard-content">
 
-    <div style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
-        <h2 style="margin: 0; font-size: 20px; color: #444;">👋 Halo, Admin</h2>
-        <span style="color: #777; font-size: 13px;">Selamat datang kembali di dashboard sistem informasi simpan pinjam</span>
+    <!-- Welcome Banner -->
+    <div class="dashboard-welcome">
+        <h2>👋 Halo, Admin</h2>
+        <span>Selamat datang kembali di dashboard sistem informasi simpan pinjam</span>
     </div>
 
+    <!-- Stats Grid -->
     <div class="dashboard-grid">
-        <div class="info-card card-nasabah"><h3>👥 Nasabah</h3><span class="data-value"><?= $total_nasabah ?></span><p>Aktif</p></div>
-        <div class="info-card card-simpanan"><h3>📥 Simpanan</h3><span class="data-value">Rp <?= number_format($total_simpanan/1000000, 1, ',', '.') ?> Jt</span><p>Total Aset</p></div>
-        <div class="info-card card-pinjaman"><h3>📤 Pinjaman</h3><span class="data-value">Rp <?= number_format($total_pinjaman/1000000, 1, ',', '.') ?> Jt</span><p>Sedang Jalan</p></div>
-        <div class="info-card card-pembayaran"><h3>🔄 Pembayaran</h3><span class="data-value">Rp <?= number_format($total_pembayaran/1000000, 1, ',', '.') ?> Jt</span><p>Total Masuk</p></div>
-        <div class="info-card card-menunggu"><h3>⏳ Pending</h3><span class="data-value"><?= $total_menunggu ?></span><p>Perlu Cek</p></div>
+        <div class="info-card card-nasabah">
+            <h3>👥 Nasabah</h3>
+            <span class="data-value"><?= $total_nasabah ?></span>
+            <p>Aktif</p>
+        </div>
+        <div class="info-card card-simpanan">
+            <h3>📥 Simpanan</h3>
+            <span class="data-value">Rp <?= number_format($total_simpanan, 0, ',', '.') ?></span>
+            <p>Total Aset</p>
+        </div>
+        <div class="info-card card-pinjaman">
+            <h3>📤 Pinjaman</h3>
+            <span class="data-value">Rp <?= number_format($total_pinjaman, 0, ',', '.') ?></span>
+            <p>Sedang Jalan</p>
+        </div>
+        <div class="info-card card-pembayaran">
+            <h3>🔄 Pembayaran</h3>
+            <span class="data-value">Rp <?= number_format($total_pembayaran, 0, ',', '.') ?></span>
+            <p>Total Masuk</p>
+        </div>
+        <div class="info-card card-menunggu">
+            <h3>⏳ Pending</h3>
+            <span class="data-value"><?= $total_menunggu ?></span>
+            <p>Perlu Cek</p>
+        </div>
     </div>
 
+    <!-- Charts Row -->
     <div class="row-2-col">
         <div class="widget-box">
             <div class="widget-header"><span>📈 Tren Keuangan (6 Bulan)</span></div>
@@ -82,12 +105,13 @@ try {
         <div class="widget-box">
             <div class="widget-header"><span>📊 Status Pengajuan</span></div>
             <div class="widget-body">
-                <div class="chart-container-fixed" style="height:250px; margin-top:25px;"><canvas id="chart-status"></canvas></div>
-                <div style="text-align:center; font-size:12px; color:#666; margin-top:10px;">Distribusi Status</div>
+                <div class="chart-container-fixed chart-pie-wrapper"><canvas id="chart-status"></canvas></div>
+                <div class="chart-legend">Distribusi Status</div>
             </div>
         </div>
     </div>
 
+    <!-- Activity & New Members Row -->
     <div class="row-2-col">
         <div class="widget-box">
             <div class="widget-header"><span>🔔 Aktivitas Terakhir</span></div>
@@ -96,13 +120,12 @@ try {
                     <thead><tr><th>Jenis</th><th>Nominal</th><th>Waktu</th></tr></thead>
                     <tbody>
                     <?php foreach($logs as $l): 
-                        $bg = $l['j']=='Simpanan'?'#e8f5e9':($l['j']=='Pinjaman'?'#ffebee':'#e3f2fd');
-                        $cl = $l['j']=='Simpanan'?'green':($l['j']=='Pinjaman'?'red':'blue');
+                        $badgeClass = $l['j']=='Simpanan'?'badge-success':($l['j']=='Pinjaman'?'badge-danger':'badge-info');
                     ?>
                     <tr>
-                        <td><span style="background:<?=$bg?>; color:<?=$cl?>; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:bold;"><?= $l['j'] ?></span></td>
-                        <td style="font-weight:bold;"><?= formatRupiah($l['n']) ?></td>
-                        <td style="color:#888;"><?= date('d M H:i', strtotime($l['t'])) ?></td>
+                        <td><span class="status-badge <?= $badgeClass ?>"><?= $l['j'] ?></span></td>
+                        <td class="font-bold"><?= formatRupiah($l['n']) ?></td>
+                        <td class="text-muted"><?= date('d M H:i', strtotime($l['t'])) ?></td>
                     </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -111,20 +134,23 @@ try {
         </div>
 
         <div class="widget-box">
-            <div class="widget-header"><span>👤 Nasabah Terbaru</span><a href="data_nasabah.php" style="font-size:12px; text-decoration:none;">Kelola</a></div>
+            <div class="widget-header">
+                <span>👤 Nasabah Terbaru</span>
+                <a href="data_nasabah.php" class="link-action">Kelola</a>
+            </div>
             <div class="widget-body">
                 <table class="table-widget">
                     <tbody>
                     <?php foreach($new_members as $m): ?>
                     <tr>
-                        <td style="display:flex; align-items:center; border:none;">
-                            <div class="user-avatar"><?= strtoupper(substr($m['nama_lengkap'],0,2)) ?></div>
+                        <td class="user-cell">
+                            <div class="user-avatar-small"><?= strtoupper(substr($m['nama_lengkap'],0,2)) ?></div>
                             <div>
-                                <div style="font-weight:bold;"><?= htmlspecialchars($m['nama_lengkap']) ?></div>
-                                <div style="font-size:11px; color:#999;">@<?= htmlspecialchars($m['username']) ?></div>
+                                <div class="font-bold"><?= htmlspecialchars($m['nama_lengkap']) ?></div>
+                                <div class="text-muted-small">@<?= htmlspecialchars($m['username']) ?></div>
                             </div>
                         </td>
-                        <td style="text-align:right; border:none;"><span style="background:#d1e7dd; color:#0f5132; padding:2px 6px; border-radius:4px; font-size:10px;">Aktif</span></td>
+                        <td class="text-right"><span class="status-badge badge-active">Aktif</span></td>
                     </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -133,7 +159,7 @@ try {
         </div>
     </div>
 
-</div></div>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -155,4 +181,4 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-<?php require_once '../includes/footer.php'; 
+<?php require_once '../includes/footer.php'; ?>
